@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virtual Washing Machine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 30px;
+      background: #f0f8ff;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    #machine {
+      margin: 30px auto;
+      width: 200px;
+      height: 200px;
+      position: relative;
+      border: 8px solid #2980b9;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #3498db;
+      background: #d6e6f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #drum {
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle at center, #95c3f7, #2c82c9);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    #drum::before,
+    #drum::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 70px;
+      background: #4a90e2;
+      border-radius: 3px;
+      top: 50%;
+      left: 50%;
+      transform-origin: center;
+    }
+
+    #drum::before {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    #drum::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .spinning {
+      animation: realSpin 1s linear infinite;
+    }
+
+    @keyframes realSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    button {
+      padding: 10px 18px;
+      margin: 10px 6px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #34495e;
+      min-height: 40px;
+    }
+
+    .controls {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    select, input[type=range] {
+      margin: 5px;
+      padding: 6px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Virtual Washing Machine</h1>
+
+<div id="machine">
+  <div id="drum"></div>
+</div>
+
+<!-- Funny & Functional Controls -->
+<div class="controls">
+  <label class="label" for="clothes">👕 Choose Clothes Type:</label>
+  <select id="clothes">
+    <option value="socks">Socks 🧦 - The stink soldiers</option>
+    <option value="jeans">Jeans 👖 - Heavyweight champs</option>
+    <option value="tshirts">T-Shirts 👕 - Party animals</option>
+    <option value="underwear">Underwear 🩲 - The shy guys</option>
+    <option value="bedsheets">Bedsheets 🛏️ - Flying ghosts</option>
+  </select>
+
+  <label class="label" for="soap">🧼 Soap Level: <span id="soapValue">5 bubbles</span></label>
+  <input type="range" id="soap" min="1" max="10" value="5" />
+
+  <label class="label" for="temp">🌡️ Water Temperature:</label>
+  <select id="temp">
+    <option value="cold">Cold ❄️ - Penguin-approved</option>
+    <option value="warm">Warm 🌤️ - Cozy cuddle wash</option>
+    <option value="hot">Hot 🔥 - Dirt sauna</option>
+  </select>
+</div>
+
+<!-- Control Buttons -->
+<button onclick="startWash()">Start Wash</button>
+<button onclick="rinse()">Rinse</button>
+<button onclick="spin()">Spin</button>
+<button onclick="stopMachine()">Stop</button>
+
+<!-- Status Message -->
+<div id="status">Idle. Your clothes are waiting...</div>
+
+<script>
+  const drum = document.getElementById('drum');
+  const status = document.getElementById('status');
+  const clothes = document.getElementById('clothes');
+  const soap = document.getElementById('soap');
+  const soapValue = document.getElementById('soapValue');
+  const temp = document.getElementById('temp');
+
+  soap.addEventListener('input', () => {
+    soapValue.textContent = `${soap.value} bubbles`;
+  });
+
+  function getDetails() {
+    const clothType = clothes.options[clothes.selectedIndex].text;
+    const soapAmt = soap.value;
+    const tempVal = temp.options[temp.selectedIndex].text;
+    return `👚 ${clothType}, 🧼 Soap: ${soapAmt} bubbles, 🌡️ Water: ${tempVal}`;
+  }
+
+  function startWash() {
+    drum.classList.add('spinning');
+    status.textContent = `🧼 Washing... Clothes are dancing in foam! 💃🫧\n${getDetails()}`;
+  }
+
+  function rinse() {
+    drum.classList.add('spinning');
+    status.textContent = `💦 Rinsing... Water ballet time! 🩰💧\n${getDetails()}`;
+  }
+
+  function spin() {
+    drum.classList.add('spinning');
+    status.textContent = `🌀 Spinning... Clothes are in a tornado ride! 🌪️🧺\n${getDetails()}`;
+  }
+
+  function stopMachine() {
+    drum.classList.remove('spinning');
+    status.textContent = `😎 Stopped. Clothes are sunbathing on a hammock.\n${getDetails()}`;
+  }
+</script>
+
+</body>
+</html>
